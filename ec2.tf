@@ -59,11 +59,11 @@ resource "aws_instance" "web-server-1" {
 }
 
 output "web_server_public_ip" {
-  value       = aws_instance.web_server.public_ip
+  value       = aws_instance.web-server-1.public_ip
   description = "Public IP address of the web server"
 }
 
 output "web_server_private_ip" {
-  value       = aws_instance.web_server.private_ip
+  value       = aws_instance.web-server-1.private_ip
   description = "Private IP address of the web server"
 }
