@@ -48,7 +48,7 @@ resource "aws_security_group" "web_server_sg" {
 resource "aws_instance" "web-server-1" {
     ami    = "ami-05fcfb9614772f051" # Example AMI ID, replace with a valid one for your region
     subnet_id         = data.aws_subnet.existing_subnet.id
-    security_groups   = [aws_security_group.web_server_sg.name] # Attach the security group
+    security_groups   = [aws_security_group.web_server_sg.id] # Attach the security group
     key_name          = "ec2-key" # Replace with your actual key pair name
     associate_public_ip_address = true # Ensure the instance gets a public IP    
     availability_zone = "eu-north-1a"
