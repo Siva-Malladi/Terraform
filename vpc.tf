@@ -6,7 +6,7 @@ resource "aws_default_vpc" "my-vpc" {
 
 resource "aws_subnet" "my-subnet-1" {
     vpc_id            = aws_default_vpc.my-vpc.id
-    cidr_block        = "172.38.37.0/24"
+    cidr_block        = "172.31.1.0/24"
     availability_zone = "eu-north-1a"
     map_public_ip_on_launch = true
     # This will automatically assign a public IP to instances launched in this subnet.
@@ -18,7 +18,7 @@ resource "aws_subnet" "my-subnet-1" {
 
 resource "aws_subnet" "my-subnet-2" {
     vpc_id            = aws_default_vpc.my-vpc.id
-    cidr_block        = "172.38.38.0/24"
+    cidr_block        = "172.31.2.0/24"
     availability_zone = "eu-north-1b"  
     tags = {
         Name = "my-subnet-2"
