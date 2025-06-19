@@ -1,0 +1,69 @@
+data "aws_vpc" "existing_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["my-vpc"]
+  }
+}
+
+data "aws_subnet" "existing_subnet" {
+  vpc_id = data.aws_vpc.existing_vpc.id # Ensure it's in the correct VPC
+  filter {
+    name   = "tag:Name"
+    values = ["my-subnet1"] # Or the name/tag of your target subnet
+  }
+}
+resource "aws_security_group" "web_server_sg" {
+  name        = "web_server_sg"
+  description = "Allow HTTP and SSH inbound traffic"
+  vpc_id      = data.aws_vpc.existing_vpc.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # WARNING: Broad access for SSH, restrict in production!
+    description = "Allow SSH from anywhere"
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
+    description = "Allow HTTP from anywhere"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # All protocols
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "WebServerSG"
+  }
+}
+
+resource "aws_instance" "web-server-1" {
+    ami    = "ami-0b09627181c8d5778" # Example AMI ID, replace with a valid one for your region
+    subnet_id         = data.aws_subnet.existing_subnet.id
+    security_groups   = [aws_security_group.web_server_sg.name] # Attach the security group
+    key_name          = "ec2-key" # Replace with your actual key pair name
+    associate_public_ip_address = true # Ensure the instance gets a public IP    
+    availability_zone = "eu-north-1a"
+    instance_type     = "t2.micro"
+    tags = {
+        Name = "web-server-1"
+    } 
+}
+
+output "web_server_public_ip" {
+  value       = aws_instance.web_server.public_ip
+  description = "Public IP address of the web server"
+}
+
+output "web_server_private_ip" {
+  value       = aws_instance.web_server.private_ip
+  description = "Private IP address of the web server"
+}
