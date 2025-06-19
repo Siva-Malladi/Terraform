@@ -9,7 +9,7 @@ data "aws_subnet" "existing_subnet" {
   vpc_id = data.aws_vpc.existing_vpc.id # Ensure it's in the correct VPC
   filter {
     name   = "tag:Name"
-    values = ["my-subnet1"] # Or the name/tag of your target subnet
+    values = ["my-subnet-1"] # Or the name/tag of your target subnet
   }
 }
 resource "aws_security_group" "web_server_sg" {
