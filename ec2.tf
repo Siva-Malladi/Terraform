@@ -52,7 +52,7 @@ resource "aws_instance" "web-server-1" {
     key_name          = "ec2-kp" # Replace with your actual key pair name
     associate_public_ip_address = true # Ensure the instance gets a public IP    
     availability_zone = "eu-north-1a"
-    instance_type     = "t2.micro"
+    instance_type     = "t3.micro"
     tags = {
         Name = "web-server-1"
     } 
